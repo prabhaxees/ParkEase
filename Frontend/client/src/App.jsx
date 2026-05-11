@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ParkingMap from "./pages/ParkingMap";
+import Zones from "./pages/Zones";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/map" element={<ParkingMap />} />
+        <Route path="/zones" element={<Zones />} />
 
       </Routes>
     </BrowserRouter>

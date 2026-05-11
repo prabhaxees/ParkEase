@@ -9,22 +9,35 @@ import Zones from "./pages/Zones";
 import AdminMapEditor from "./pages/AdminMapEditor";
 
 function App() {
+
   return (
+
     <BrowserRouter>
+
       <Routes>
 
         <Route path="/" element={<Login />} />
+
         <Route path="/register" element={<Register />} />
+
         <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/map" element={<ParkingMap />} />
+
         <Route path="/zones" element={<Zones />} />
+
         <Route
           path="/admin/map/:zoneId"
           element={<AdminMapEditor />}
         />
 
+        <Route
+          path="/map/:zoneId"
+          element={<ParkingMap />}
+        />
+
       </Routes>
+
     </BrowserRouter>
   );
 }

@@ -36,7 +36,45 @@ const getSlotsByZone = async (req, res) => {
   }
 };
 
+const bookSlot = async (req, res) => {
+
+  try {
+
+    const slot = await Slot.findById(req.params.id);
+
+    if (!slot) {
+
+      return res.status(404).json({
+        message: "Slot not found"
+      });
+
+    }
+
+    if (slot.status === "booked") {
+
+      return res.status(400).json({
+        message: "Slot already booked"
+      });
+
+    }
+
+    slot.status = "booked";
+
+    await slot.save();
+
+    res.json(slot);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+};
+
 module.exports = {
   createSlot,
-  getSlotsByZone
+  getSlotsByZone,
+  bookSlot
 };

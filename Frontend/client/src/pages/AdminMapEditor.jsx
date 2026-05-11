@@ -15,26 +15,43 @@ function AdminMapEditor() {
   useEffect(() => {
 
     fetchZone();
+
     fetchSlots();
 
-  }, []);
+  }, [zoneId]);
 
   const fetchZone = async () => {
 
-    const res = await API.get("/zones");
+    try {
 
-    const foundZone = res.data.find(
-      (z) => z._id === zoneId
-    );
+      const res = await API.get("/zones");
 
-    setZone(foundZone);
+      const foundZone = res.data.find(
+        (z) => z._id === zoneId
+      );
+
+      setZone(foundZone);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
   };
 
   const fetchSlots = async () => {
 
-    const res = await API.get(`/slots/${zoneId}`);
+    try {
 
-    setSlots(res.data);
+      const res = await API.get(`/slots/${zoneId}`);
+
+      setSlots(res.data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
   };
 
   const handleMapClick = async (e) => {
@@ -55,21 +72,36 @@ function AdminMapEditor() {
 
     };
 
-    const res = await API.post(
-      "/slots",
-      slotData
-    );
+    try {
 
-    setSlots([...slots, res.data]);
+      const res = await API.post(
+        "/slots",
+        slotData
+      );
+
+      setSlots([...slots, res.data]);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
   };
 
-  if (!zone) return <h1>Loading...</h1>;
+  if (!zone) {
+
+    return (
+      <h1 className="text-2xl text-center mt-10">
+        Loading...
+      </h1>
+    );
+  }
 
   return (
 
     <div className="min-h-screen bg-gray-100 p-10">
 
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-4xl font-bold mb-8">
         {zone.name}
       </h1>
 
@@ -77,19 +109,24 @@ function AdminMapEditor() {
 
         <img
           src={zone.imageUrl}
-          alt=""
+          alt={zone.name}
           onClick={handleMapClick}
-          className="rounded-xl shadow-lg"
+          className="rounded-xl shadow-lg max-w-full cursor-crosshair"
         />
 
         {slots.map((slot) => (
 
           <div
             key={slot._id}
-            className="absolute bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold"
+            className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white
+              ${slot.status === "available"
+                ? "bg-green-500"
+                : "bg-red-500"
+              }`}
             style={{
-              left: slot.x,
-              top: slot.y
+              left: `${slot.x}px`,
+              top: `${slot.y}px`,
+              transform: "translate(-50%, -50%)"
             }}
           >
             {slot.slotNumber}

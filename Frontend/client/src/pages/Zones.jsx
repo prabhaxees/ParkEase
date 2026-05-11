@@ -41,7 +41,7 @@ function Zones() {
         {zones.map((zone) => (
 
           <Link
-            to={`/admin/map/${zone._id}`}
+            to={`/map/${zone._id}`}
             key={zone._id}
           >
 

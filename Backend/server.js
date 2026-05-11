@@ -1,19 +1,26 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: path.join(__dirname, ".env") });
+
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
 const slotRoutes = require("./routes/slotRoutes");
+const zoneRoutes = require("./routes/zoneRoutes");
 
-dotenv.config();
 connectDB();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/slots", slotRoutes);
+app.use("/api/zones", zoneRoutes);
 
 app.get("/", (req, res) => {
   res.send("ParkEase API Running...");

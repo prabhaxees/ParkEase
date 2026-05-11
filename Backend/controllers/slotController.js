@@ -1,4 +1,5 @@
 const Slot = require("../models/Slot");
+
 const Booking = require("../models/Booking");
 
 const createSlot = async (req, res) => {
@@ -61,7 +62,9 @@ const bookSlot = async (req, res) => {
 
     slot.status = "booked";
 
-    await Booking.create({
+    await slot.save();
+
+    const booking = await Booking.create({
 
       slotId: slot._id,
 
@@ -69,11 +72,13 @@ const bookSlot = async (req, res) => {
 
     });
 
-    await slot.save();
+    console.log("BOOKING CREATED:", booking);
 
     res.json(slot);
 
   } catch (error) {
+
+    console.log(error);
 
     res.status(500).json({
       message: error.message

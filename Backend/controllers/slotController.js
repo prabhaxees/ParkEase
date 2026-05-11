@@ -1,4 +1,5 @@
 const Slot = require("../models/Slot");
+const Booking = require("../models/Booking");
 
 const createSlot = async (req, res) => {
 
@@ -59,6 +60,14 @@ const bookSlot = async (req, res) => {
     }
 
     slot.status = "booked";
+
+    await Booking.create({
+
+      slotId: slot._id,
+
+      zoneId: slot.zoneId
+
+    });
 
     await slot.save();
 

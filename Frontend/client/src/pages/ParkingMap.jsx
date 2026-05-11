@@ -120,22 +120,37 @@ function ParkingMap() {
           )}
         </div>
 
-        {/* Stats */}
+        {/* Parking Layout Summary */}
 
-        <div className="flex gap-6 mb-6">
+        <div className="grid gap-4 mb-6 md:grid-cols-[1fr_auto]">
+          <div className="rounded-3xl bg-white p-6 shadow-lg border border-[#f3d2d9] max-w-xl">
+            <h2 className="mb-4 text-2xl font-semibold text-[#3b1a20]">
+              Parking Layout
+            </h2>
 
-          <div className="bg-white px-6 py-3 rounded-3xl shadow-lg border border-[#f3d2d9]">
-            <p className="text-[#ba0c2f] font-bold">
-              Available: {availableSlots}
-            </p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-3xl bg-[#fff5f7] p-4 text-sm text-[#6b414a] shadow-sm border border-[#f3d2d9]">
+                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#ba0c2f] mb-1">
+                  Total Spaces
+                </p>
+                <p className="text-3xl font-bold text-[#3b1a20]">{slots.length}</p>
+              </div>
+
+              <div className="rounded-3xl bg-[#fff5f7] p-4 text-sm text-[#6b414a] shadow-sm border border-[#f3d2d9]">
+                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#ba0c2f] mb-1">
+                  Occupied
+                </p>
+                <p className="text-3xl font-bold text-[#3b1a20]">{bookedSlots}</p>
+              </div>
+
+              <div className="rounded-3xl bg-[#fff5f7] p-4 text-sm text-[#6b414a] shadow-sm border border-[#f3d2d9]">
+                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#ba0c2f] mb-1">
+                  Available
+                </p>
+                <p className="text-3xl font-bold text-[#3b1a20]">{availableSlots}</p>
+              </div>
+            </div>
           </div>
-
-          <div className="bg-white px-6 py-3 rounded-3xl shadow-lg border border-[#f3d2d9]">
-            <p className="text-[#ba0c2f] font-bold">
-              Booked: {bookedSlots}
-            </p>
-          </div>
-
         </div>
 
         {/* Legend */}

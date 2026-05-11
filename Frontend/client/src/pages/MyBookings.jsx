@@ -29,6 +29,20 @@ function MyBookings() {
 
   }, []);
 
+  const handleCancelBooking = async (bookingId) => {
+    if (!window.confirm("Cancel this booking?")) {
+      return;
+    }
+
+    try {
+      await API.delete(`/bookings/${bookingId}`);
+      setBookings(bookings.filter((booking) => booking._id !== bookingId));
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || "Could not cancel booking");
+    }
+  };
+
   return (
 
     <div className="min-h-screen bg-gray-100">
@@ -74,6 +88,13 @@ function MyBookings() {
                 ).toLocaleString()}
               </p>
 
+              <button
+                type="button"
+                onClick={() => handleCancelBooking(booking._id)}
+                className="mt-4 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white"
+              >
+                Cancel Booking
+              </button>
             </div>
 
           ))}

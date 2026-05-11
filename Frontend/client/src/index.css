@@ -1,1 +1,75 @@
 @import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --brand-red: #ba0c2f;
+  --brand-red-dark: #8a0a23;
+  --brand-red-soft: #f7d9e0;
+  --brand-white: #ffffff;
+  --brand-surface: #fff5f7;
+  --brand-border: #f3d2d9;
+  --text-dark: #2b0f15;
+  --shadow-glow: 0 20px 45px rgba(186, 12, 47, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-dark);
+  background: radial-gradient(circle at top left, rgba(186, 12, 47, 0.14), transparent 24%),
+              linear-gradient(180deg, #ffffff 0%, #fbf1f4 100%);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.brand-card {
+  background: var(--brand-white);
+  border: 1px solid var(--brand-border);
+  box-shadow: var(--shadow-glow);
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 9999px;
+  background: var(--brand-red-soft);
+  color: var(--brand-red-dark);
+  font-weight: 600;
+}
+
+.brand-button {
+  background-color: var(--brand-red);
+  color: var(--brand-white);
+  border: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.brand-button:hover,
+.brand-button:focus-visible {
+  background-color: var(--brand-red-dark);
+}
+
+.page-shell {
+  background: var(--brand-surface);
+}

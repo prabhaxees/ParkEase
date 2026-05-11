@@ -45,19 +45,19 @@ function MyBookings() {
 
   return (
 
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#fff5f7]">
 
       <Navbar />
 
       <div className="p-10">
 
-        <h1 className="text-4xl font-bold mb-8">
+        <h1 className="text-4xl font-bold mb-8 text-[#ba0c2f]">
           My Bookings
         </h1>
 
         {bookings.length === 0 && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            <p className="text-gray-600">
+          <div className="bg-white p-6 rounded-3xl shadow-lg border border-[#f3d2d9]">
+            <p className="text-[#5d3b42]">
               No bookings found.
             </p>
           </div>
@@ -69,7 +69,7 @@ function MyBookings() {
 
             <div
               key={booking._id}
-              className="bg-white p-6 rounded-xl shadow"
+              className="bg-white p-6 rounded-3xl shadow-lg border border-[#f3d2d9]"
             >
 
               <h2 className="text-2xl font-semibold mb-2">
@@ -80,7 +80,7 @@ function MyBookings() {
                 Slot: {booking.slotId?.slotNumber}
               </p>
 
-              <p className="text-gray-500 mt-2">
+              <p className="text-[#6b414a] mt-2">
                 Booked At:
                 {" "}
                 {new Date(
@@ -91,7 +91,7 @@ function MyBookings() {
               <button
                 type="button"
                 onClick={() => handleCancelBooking(booking._id)}
-                className="mt-4 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white"
+                className="mt-4 rounded-2xl bg-[#ba0c2f] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#8a0a23]"
               >
                 Cancel Booking
               </button>

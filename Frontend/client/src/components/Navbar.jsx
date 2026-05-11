@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import logo from "./logo.png";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -10,37 +11,45 @@ function Navbar() {
 
   return (
 
-    <nav className="bg-blue-600 text-white px-8 py-4 flex items-center justify-between">
+    <nav className="bg-[#ba0c2f] text-white px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-lg">
 
-      <Link
-        to="/zones"
-        className="text-2xl font-bold"
-      >
-        ParkEase
-      </Link>
+      <div className="flex items-center gap-3">
+  <img
+    src={logo}
+    alt="ParkEase Logo"
+    className="h-14 w-auto object-contain"
+  />
 
-      <div className="flex items-center gap-6">
+  <Link
+    to="/zones"
+    className="text-2xl font-bold tracking-tight"
+  >
+    ParkEase
+  </Link>
+</div>
 
-        <Link to="/zones">
+      <div className="flex flex-wrap items-center gap-4">
+
+        <Link to="/zones" className="text-sm font-medium hover:text-[#f7d9e0]">
           Zones
         </Link>
 
-        <Link to="/dashboard">
+        <Link to="/dashboard" className="text-sm font-medium hover:text-[#f7d9e0]">
           Dashboard
         </Link>
 
-        <Link to="/my-bookings">
+        <Link to="/my-bookings" className="text-sm font-medium hover:text-[#f7d9e0]">
           My Bookings
         </Link>
 
-        <Link to="/admin">
+        <Link to="/admin" className="text-sm font-medium hover:text-[#f7d9e0]">
           Admin
         </Link>
 
         <button
           type="button"
           onClick={handleLogout}
-          className="rounded bg-white px-3 py-1 text-sm font-semibold text-blue-600"
+          className="rounded bg-white px-3 py-1 text-sm font-semibold text-[#ba0c2f] shadow-sm transition hover:bg-[#f7d9e0]"
         >
           Logout
         </button>

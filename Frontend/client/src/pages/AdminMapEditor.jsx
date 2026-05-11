@@ -118,19 +118,19 @@ function AdminMapEditor() {
 
   return (
 
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#fff5f7]">
 
       <Navbar />
 
       <main className="p-10">
 
-        <div className="mb-4 flex items-center gap-4">
-          <h1 className="text-4xl font-bold">
+        <div className="mb-4 flex flex-wrap items-center gap-4">
+          <h1 className="text-4xl font-bold text-[#ba0c2f]">
             {zone.name}
           </h1>
 
           {zone.status === "maintenance" && (
-            <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-800">
+            <span className="rounded-full bg-[#f7d9e0] px-3 py-1 text-sm font-semibold text-[#8a0a23]">
               Maintenance Mode
             </span>
           )}
@@ -167,11 +167,11 @@ function AdminMapEditor() {
 
         </div>
 
-        <div className="mt-8 rounded-xl bg-white p-6 shadow">
-          <h2 className="mb-4 text-2xl font-semibold">Slots</h2>
+        <div className="mt-8 rounded-[30px] bg-white p-6 shadow-lg border border-[#f3d2d9]">
+          <h2 className="mb-4 text-2xl font-semibold text-[#ba0c2f]">Slots</h2>
 
           {slots.length === 0 ? (
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#6b414a]">
               Click the map to add slots.
             </p>
           ) : (
@@ -179,11 +179,11 @@ function AdminMapEditor() {
               {slots.map((slot) => (
                 <div
                   key={slot._id}
-                  className="flex items-center justify-between gap-4 rounded-xl border px-4 py-3"
+                  className="flex items-center justify-between gap-4 rounded-3xl border border-[#f3d2d9] px-4 py-3 bg-[#fff5f7]"
                 >
                   <div>
                     <p className="font-semibold">{slot.slotNumber}</p>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-[#6b414a]">
                       Status: {slot.status}
                       {slot.bookedByName && (
                         <span>
@@ -196,7 +196,7 @@ function AdminMapEditor() {
                   <button
                     type="button"
                     onClick={() => handleDeleteSlot(slot._id)}
-                    className="rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white"
+                    className="rounded-2xl bg-[#ba0c2f] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#8a0a23]"
                   >
                     Delete
                   </button>

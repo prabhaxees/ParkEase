@@ -102,19 +102,19 @@ function ParkingMap() {
 
   return (
 
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#fff5f7]">
 
       <Navbar />
 
       <main className="p-10">
 
         <div className="mb-4 flex flex-wrap items-center gap-4">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-4xl font-bold text-[#ba0c2f]">
             {zone.name}
           </h1>
 
           {zone.status === "maintenance" && (
-            <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-800">
+            <span className="rounded-full bg-[#f7d9e0] px-3 py-1 text-sm font-semibold text-[#8a0a23]">
               Under Maintenance
             </span>
           )}
@@ -124,14 +124,14 @@ function ParkingMap() {
 
         <div className="flex gap-6 mb-6">
 
-          <div className="bg-white px-6 py-3 rounded-xl shadow">
-            <p className="text-green-600 font-bold">
+          <div className="bg-white px-6 py-3 rounded-3xl shadow-lg border border-[#f3d2d9]">
+            <p className="text-[#ba0c2f] font-bold">
               Available: {availableSlots}
             </p>
           </div>
 
-          <div className="bg-white px-6 py-3 rounded-xl shadow">
-            <p className="text-red-600 font-bold">
+          <div className="bg-white px-6 py-3 rounded-3xl shadow-lg border border-[#f3d2d9]">
+            <p className="text-[#ba0c2f] font-bold">
               Booked: {bookedSlots}
             </p>
           </div>
@@ -142,13 +142,13 @@ function ParkingMap() {
 
         <div className="flex gap-6 mb-6">
 
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
+            <div className="w-4 h-4 bg-[#ba0c2f] rounded-full shadow-sm"></div>
             <p>Available</p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
+            <div className="w-4 h-4 bg-[#8a0a23] rounded-full shadow-sm"></div>
             <p>Booked</p>
           </div>
 

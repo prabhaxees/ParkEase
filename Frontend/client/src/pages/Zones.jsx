@@ -31,13 +31,13 @@ function Zones() {
 
   return (
 
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#fff5f7]">
 
       <Navbar />
 
       <main className="p-10">
 
-        <h1 className="text-4xl font-bold mb-8 text-center">
+        <h1 className="text-4xl font-bold mb-8 text-center text-[#ba0c2f]">
           Parking Zones
         </h1>
 
@@ -50,7 +50,7 @@ function Zones() {
               key={zone._id}
             >
 
-              <div className="bg-white rounded-xl shadow overflow-hidden hover:scale-105 transition duration-300 cursor-pointer">
+              <div className="bg-white rounded-3xl shadow-lg border border-[#f3d2d9] overflow-hidden hover:-translate-y-1 hover:shadow-xl transition duration-300 cursor-pointer">
 
                 <img
                   src={zone.imageUrl}

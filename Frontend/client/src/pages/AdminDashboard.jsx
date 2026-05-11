@@ -75,17 +75,17 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#fff5f7]">
       <Navbar />
 
       <main className="p-10">
-        <h1 className="mb-8 text-4xl font-bold">
+        <h1 className="mb-8 text-4xl font-bold text-[#ba0c2f]">
           Admin Dashboard
         </h1>
 
         <form
           onSubmit={handleCreateZone}
-          className="mb-10 grid gap-4 rounded-xl bg-white p-6 shadow md:grid-cols-[1fr_1fr_auto]"
+          className="mb-10 grid gap-4 rounded-[30px] bg-white p-6 shadow-lg border border-[#f3d2d9] md:grid-cols-[1fr_1fr_auto]"
         >
           <input
             type="text"
@@ -106,7 +106,7 @@ function AdminDashboard() {
 
           <button
             type="submit"
-            className="rounded bg-blue-600 px-6 py-3 font-semibold text-white"
+            className="rounded-2xl bg-[#ba0c2f] px-6 py-3 font-semibold text-white transition hover:bg-[#8a0a23]"
           >
             Add Zone
           </button>
@@ -116,7 +116,7 @@ function AdminDashboard() {
           {zones.map((zone) => (
             <div
               key={zone._id}
-              className="overflow-hidden rounded-xl bg-white shadow"
+              className="overflow-hidden rounded-[30px] bg-white shadow-lg border border-[#f3d2d9]"
             >
               <img
                 src={zone.imageUrl}
@@ -129,14 +129,14 @@ function AdminDashboard() {
                   {zone.name}
                 </h2>
 
-                <p className="mb-4 text-sm font-medium text-slate-600">
+                <p className="mb-4 text-sm font-medium text-[#6b414a]">
                   Status: {zone.status === "maintenance" ? "Maintenance" : "Active"}
                 </p>
 
                 <div className="flex flex-wrap gap-2">
                   <Link
                     to={`/admin/map/${zone._id}`}
-                    className="rounded bg-blue-600 px-4 py-2 font-semibold text-white"
+                    className="rounded-2xl bg-[#ba0c2f] px-4 py-2 font-semibold text-white transition hover:bg-[#8a0a23]"
                   >
                     Edit Slots
                   </Link>
@@ -144,7 +144,7 @@ function AdminDashboard() {
                   <button
                     type="button"
                     onClick={() => handleToggleMaintenance(zone)}
-                    className="rounded bg-amber-500 px-4 py-2 font-semibold text-white"
+                    className="rounded-2xl bg-[#8a0a23] px-4 py-2 font-semibold text-white transition hover:bg-[#66161f]"
                   >
                     {zone.status === "maintenance" ? "Set Active" : "Set Maintenance"}
                   </button>
@@ -152,7 +152,7 @@ function AdminDashboard() {
                   <button
                     type="button"
                     onClick={() => handleDeleteZone(zone._id)}
-                    className="rounded bg-red-600 px-4 py-2 font-semibold text-white"
+                    className="rounded-2xl bg-[#ba0c2f] px-4 py-2 font-semibold text-white transition hover:bg-[#8a0a23]"
                   >
                     Delete Zone
                   </button>

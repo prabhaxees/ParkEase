@@ -7,6 +7,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ParkingMap from "./pages/ParkingMap";
 import Zones from "./pages/Zones";
 import AdminMapEditor from "./pages/AdminMapEditor";
+import MyBookings from "./pages/MyBookings";
 
 function App() {
 
@@ -34,6 +35,10 @@ function App() {
         <Route
           path="/map/:zoneId"
           element={<ParkingMap />}
+        />
+        <Route
+          path="/my-bookings"
+          element={<MyBookings />}
         />
 
       </Routes>

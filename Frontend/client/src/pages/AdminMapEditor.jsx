@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import API from "../api/axios";
+import Navbar from "../components/Navbar";
 
 function AdminMapEditor() {
 
@@ -14,45 +15,45 @@ function AdminMapEditor() {
 
   useEffect(() => {
 
+    const fetchZone = async () => {
+
+      try {
+
+        const res = await API.get("/zones");
+
+        const foundZone = res.data.find(
+          (z) => z._id === zoneId
+        );
+
+        setZone(foundZone);
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
+    const fetchSlots = async () => {
+
+      try {
+
+        const res = await API.get(`/slots/${zoneId}`);
+
+        setSlots(res.data);
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
     fetchZone();
 
     fetchSlots();
 
   }, [zoneId]);
-
-  const fetchZone = async () => {
-
-    try {
-
-      const res = await API.get("/zones");
-
-      const foundZone = res.data.find(
-        (z) => z._id === zoneId
-      );
-
-      setZone(foundZone);
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
-
-  const fetchSlots = async () => {
-
-    try {
-
-      const res = await API.get(`/slots/${zoneId}`);
-
-      setSlots(res.data);
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
 
   const handleMapClick = async (e) => {
 
@@ -99,42 +100,48 @@ function AdminMapEditor() {
 
   return (
 
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen bg-gray-100">
 
-      <h1 className="text-4xl font-bold mb-8">
-        {zone.name}
-      </h1>
+      <Navbar />
 
-      <div className="relative w-fit">
+      <main className="p-10">
 
-        <img
-          src={zone.imageUrl}
-          alt={zone.name}
-          onClick={handleMapClick}
-          className="rounded-xl shadow-lg max-w-full cursor-crosshair"
-        />
+        <h1 className="text-4xl font-bold mb-8">
+          {zone.name}
+        </h1>
 
-        {slots.map((slot) => (
+        <div className="relative w-fit">
 
-          <div
-            key={slot._id}
-            className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white
+          <img
+            src={zone.imageUrl}
+            alt={zone.name}
+            onClick={handleMapClick}
+            className="rounded-xl shadow-lg max-w-full cursor-crosshair"
+          />
+
+          {slots.map((slot) => (
+
+            <div
+              key={slot._id}
+              className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white
               ${slot.status === "available"
                 ? "bg-green-500"
                 : "bg-red-500"
               }`}
-            style={{
-              left: `${slot.x}px`,
-              top: `${slot.y}px`,
-              transform: "translate(-50%, -50%)"
-            }}
-          >
-            {slot.slotNumber}
-          </div>
+              style={{
+                left: `${slot.x}px`,
+                top: `${slot.y}px`,
+                transform: "translate(-50%, -50%)"
+              }}
+            >
+              {slot.slotNumber}
+            </div>
 
-        ))}
+          ))}
 
-      </div>
+        </div>
+
+      </main>
 
     </div>
   );

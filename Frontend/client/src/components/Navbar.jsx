@@ -1,16 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   return (
 
-    <nav className="bg-blue-600 text-white px-8 py-4 flex justify-between">
+    <nav className="bg-blue-600 text-white px-8 py-4 flex items-center justify-between">
 
-      <h1 className="text-2xl font-bold">
+      <Link
+        to="/zones"
+        className="text-2xl font-bold"
+      >
         ParkEase
-      </h1>
+      </Link>
 
-      <div className="flex gap-6">
+      <div className="flex items-center gap-6">
 
         <Link to="/zones">
           Zones
@@ -19,6 +28,22 @@ function Navbar() {
         <Link to="/dashboard">
           Dashboard
         </Link>
+
+        <Link to="/my-bookings">
+          My Bookings
+        </Link>
+
+        <Link to="/admin">
+          Admin
+        </Link>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="rounded bg-white px-3 py-1 text-sm font-semibold text-blue-600"
+        >
+          Logout
+        </button>
 
       </div>
 

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
+const fs = require("fs");
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
@@ -24,9 +25,22 @@ app.use("/api/slots", slotRoutes);
 app.use("/api/zones", zoneRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-app.get("/", (req, res) => {
-  res.send("ParkEase API Running...");
-});
+const clientDistPath = path.join(
+  __dirname,
+  "../Frontend/client/dist"
+);
+
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("ParkEase API Running...");
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 

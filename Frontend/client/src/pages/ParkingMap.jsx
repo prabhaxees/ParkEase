@@ -16,45 +16,45 @@ function ParkingMap() {
 
   useEffect(() => {
 
+    const fetchZone = async () => {
+
+      try {
+
+        const res = await API.get("/zones");
+
+        const foundZone = res.data.find(
+          (z) => z._id === zoneId
+        );
+
+        setZone(foundZone);
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
+    const fetchSlots = async () => {
+
+      try {
+
+        const res = await API.get(`/slots/${zoneId}`);
+
+        setSlots(res.data);
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
     fetchZone();
 
     fetchSlots();
 
   }, [zoneId]);
-
-  const fetchZone = async () => {
-
-    try {
-
-      const res = await API.get("/zones");
-
-      const foundZone = res.data.find(
-        (z) => z._id === zoneId
-      );
-
-      setZone(foundZone);
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
-
-  const fetchSlots = async () => {
-
-    try {
-
-      const res = await API.get(`/slots/${zoneId}`);
-
-      setSlots(res.data);
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
 
   const handleBookSlot = async (slotId, slotNumber) => {
 
@@ -80,7 +80,7 @@ function ParkingMap() {
 
       console.log(error);
 
-      alert("Slot already booked");
+      alert(error.response?.data?.message || "Could not book slot");
 
     }
   };
@@ -104,70 +104,72 @@ function ParkingMap() {
 
   return (
 
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen bg-gray-100">
 
       <Navbar />
 
-      <h1 className="text-4xl font-bold mb-8">
-        {zone.name}
-      </h1>
+      <main className="p-10">
 
-      {/* Stats */}
+        <h1 className="text-4xl font-bold mb-8">
+          {zone.name}
+        </h1>
 
-      <div className="flex gap-6 mb-6">
+        {/* Stats */}
 
-        <div className="bg-white px-6 py-3 rounded-xl shadow">
-          <p className="text-green-600 font-bold">
-            Available: {availableSlots}
-          </p>
+        <div className="flex gap-6 mb-6">
+
+          <div className="bg-white px-6 py-3 rounded-xl shadow">
+            <p className="text-green-600 font-bold">
+              Available: {availableSlots}
+            </p>
+          </div>
+
+          <div className="bg-white px-6 py-3 rounded-xl shadow">
+            <p className="text-red-600 font-bold">
+              Booked: {bookedSlots}
+            </p>
+          </div>
+
         </div>
 
-        <div className="bg-white px-6 py-3 rounded-xl shadow">
-          <p className="text-red-600 font-bold">
-            Booked: {bookedSlots}
-          </p>
+        {/* Legend */}
+
+        <div className="flex gap-6 mb-6">
+
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+            <p>Available</p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+            <p>Booked</p>
+          </div>
+
         </div>
 
-      </div>
+        {/* Parking Map */}
 
-      {/* Legend */}
+        <div className="relative w-fit">
 
-      <div className="flex gap-6 mb-6">
+          <img
+            src={zone.imageUrl}
+            alt={zone.name}
+            className="rounded-xl shadow-lg max-w-full"
+          />
 
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-          <p>Available</p>
-        </div>
+          {slots.map((slot) => (
 
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-          <p>Booked</p>
-        </div>
-
-      </div>
-
-      {/* Parking Map */}
-
-      <div className="relative w-fit">
-
-        <img
-          src={zone.imageUrl}
-          alt={zone.name}
-          className="rounded-xl shadow-lg max-w-full"
-        />
-
-        {slots.map((slot) => (
-
-          <button
-            key={slot._id}
-            onClick={() =>
-              handleBookSlot(
-                slot._id,
-                slot.slotNumber
-              )
-            }
-            disabled={slot.status === "booked"}
-            className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white transition
+            <button
+              key={slot._id}
+              onClick={() =>
+                handleBookSlot(
+                  slot._id,
+                  slot.slotNumber
+                )
+              }
+              disabled={slot.status === "booked"}
+              className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white transition
 
               ${slot.status === "available"
 
@@ -176,18 +178,20 @@ function ParkingMap() {
                 : "bg-red-500 cursor-not-allowed opacity-80"
 
               }`}
-            style={{
-              left: `${slot.x}px`,
-              top: `${slot.y}px`,
-              transform: "translate(-50%, -50%)"
-            }}
-          >
-            {slot.slotNumber}
-          </button>
+              style={{
+                left: `${slot.x}px`,
+                top: `${slot.y}px`,
+                transform: "translate(-50%, -50%)"
+              }}
+            >
+              {slot.slotNumber}
+            </button>
 
-        ))}
+          ))}
 
-      </div>
+        </div>
+
+      </main>
 
     </div>
   );

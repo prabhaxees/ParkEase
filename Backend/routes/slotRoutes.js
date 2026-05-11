@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -12,6 +13,10 @@ router.post("/", createSlot);
 
 router.get("/:zoneId", getSlotsByZone);
 
-router.put("/book/:id", bookSlot);
+router.put(
+  "/book/:id",
+  protect,
+  bookSlot
+);
 
 module.exports = router;

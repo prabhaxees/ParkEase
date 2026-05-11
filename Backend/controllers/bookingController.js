@@ -19,6 +19,31 @@ const getBookings = async (req, res) => {
   }
 };
 
+const getMyBookings = async (req, res) => {
+
+  try {
+
+    const bookings = await Booking.find({
+
+      userId: req.user.id
+
+    })
+
+    .populate("slotId")
+    .populate("zoneId");
+
+    res.json(bookings);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+};
+
 module.exports = {
-  getBookings
+  getBookings,
+  getMyBookings
 };

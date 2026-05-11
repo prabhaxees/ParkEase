@@ -66,6 +66,8 @@ const bookSlot = async (req, res) => {
 
     const booking = await Booking.create({
 
+      userId: req.user.id,
+
       slotId: slot._id,
 
       zoneId: slot.zoneId

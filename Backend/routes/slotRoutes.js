@@ -1,16 +1,14 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
-  addSlot,
-  getSlots,
-  bookSlot,
-  cancelBooking
+  createSlot,
+  getSlotsByZone
 } = require("../controllers/slotController");
 
-router.post("/add", addSlot);
-router.get("/", getSlots);
-router.post("/book/:id", bookSlot);
-router.post("/cancel/:id", cancelBooking);
+router.post("/", createSlot);
+
+router.get("/:zoneId", getSlotsByZone);
 
 module.exports = router;

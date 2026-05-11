@@ -10,6 +10,7 @@ const slotSchema = new mongoose.Schema({
   },
 
   x: Number,
+
   y: Number,
 
   status: {

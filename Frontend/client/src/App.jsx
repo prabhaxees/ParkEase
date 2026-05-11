@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ParkingMap from "./pages/ParkingMap";
 import Zones from "./pages/Zones";
+import AdminMapEditor from "./pages/AdminMapEditor";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/map" element={<ParkingMap />} />
         <Route path="/zones" element={<Zones />} />
+        <Route
+          path="/admin/map/:zoneId"
+          element={<AdminMapEditor />}
+        />
 
       </Routes>
     </BrowserRouter>

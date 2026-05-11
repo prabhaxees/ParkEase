@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import API from "../api/axios";
 
@@ -39,26 +40,30 @@ function Zones() {
 
         {zones.map((zone) => (
 
-          <div
+          <Link
+            to={`/admin/map/${zone._id}`}
             key={zone._id}
-            className="bg-white rounded-xl shadow overflow-hidden"
           >
 
-            <img
-              src={zone.imageUrl}
-              alt={zone.name}
-              className="h-60 w-full object-cover"
-            />
+            <div className="bg-white rounded-xl shadow overflow-hidden hover:scale-105 transition duration-300 cursor-pointer">
 
-            <div className="p-4">
+              <img
+                src={zone.imageUrl}
+                alt={zone.name}
+                className="h-60 w-full object-cover"
+              />
 
-              <h2 className="text-2xl font-semibold">
-                {zone.name}
-              </h2>
+              <div className="p-4">
+
+                <h2 className="text-2xl font-semibold">
+                  {zone.name}
+                </h2>
+
+              </div>
 
             </div>
 
-          </div>
+          </Link>
 
         ))}
 

@@ -56,6 +56,10 @@ function AdminMapEditor() {
   }, [zoneId]);
 
   const handleMapClick = async (e) => {
+    if (zone.status === "maintenance") {
+      alert("Cannot add slots while this zone is in maintenance mode.");
+      return;
+    }
 
     const x = e.nativeEvent.offsetX;
 
@@ -89,6 +93,20 @@ function AdminMapEditor() {
     }
   };
 
+  const handleDeleteSlot = async (slotId) => {
+    if (!window.confirm("Delete this slot?")) {
+      return;
+    }
+
+    try {
+      await API.delete(`/slots/${slotId}`);
+      setSlots(slots.filter((slot) => slot._id !== slotId));
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || "Could not delete slot");
+    }
+  };
+
   if (!zone) {
 
     return (
@@ -106,9 +124,17 @@ function AdminMapEditor() {
 
       <main className="p-10">
 
-        <h1 className="text-4xl font-bold mb-8">
-          {zone.name}
-        </h1>
+        <div className="mb-4 flex items-center gap-4">
+          <h1 className="text-4xl font-bold">
+            {zone.name}
+          </h1>
+
+          {zone.status === "maintenance" && (
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-800">
+              Maintenance Mode
+            </span>
+          )}
+        </div>
 
         <div className="relative w-fit">
 
@@ -139,6 +165,45 @@ function AdminMapEditor() {
 
           ))}
 
+        </div>
+
+        <div className="mt-8 rounded-xl bg-white p-6 shadow">
+          <h2 className="mb-4 text-2xl font-semibold">Slots</h2>
+
+          {slots.length === 0 ? (
+            <p className="text-sm text-slate-600">
+              Click the map to add slots.
+            </p>
+          ) : (
+            <div className="grid gap-3">
+              {slots.map((slot) => (
+                <div
+                  key={slot._id}
+                  className="flex items-center justify-between gap-4 rounded-xl border px-4 py-3"
+                >
+                  <div>
+                    <p className="font-semibold">{slot.slotNumber}</p>
+                    <p className="text-sm text-slate-600">
+                      Status: {slot.status}
+                      {slot.bookedByName && (
+                        <span>
+                          {" "}- Booked by {slot.bookedByName}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteSlot(slot._id)}
+                    className="rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white"
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
       </main>

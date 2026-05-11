@@ -10,6 +10,12 @@ const zoneSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
     required: true
+  },
+
+  status: {
+    type: String,
+    enum: ["active", "maintenance"],
+    default: "active"
   }
 
 }, { timestamps: true });

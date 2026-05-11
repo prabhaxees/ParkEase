@@ -27,7 +27,31 @@ const getSlotsByZone = async (req, res) => {
       zoneId: req.params.zoneId
     });
 
-    res.json(slots);
+    const slotIds = slots.map((slot) => slot._id);
+    const bookings = await Booking.find({
+      slotId: { $in: slotIds }
+    }).populate("userId", "name email");
+
+    const latestBookingBySlot = {};
+
+    bookings.forEach((booking) => {
+      const key = booking.slotId.toString();
+      if (!latestBookingBySlot[key] || booking.bookedAt > latestBookingBySlot[key].bookedAt) {
+        latestBookingBySlot[key] = booking;
+      }
+    });
+
+    const slotsWithBookingName = slots.map((slot) => {
+      const booking = latestBookingBySlot[slot._id.toString()];
+
+      return {
+        ...slot.toObject(),
+        bookedByName: booking?.userId?.name || null,
+        bookedByEmail: booking?.userId?.email || null
+      };
+    });
+
+    res.json(slotsWithBookingName);
 
   } catch (error) {
 
@@ -35,6 +59,23 @@ const getSlotsByZone = async (req, res) => {
       message: error.message
     });
 
+  }
+};
+
+const deleteSlot = async (req, res) => {
+  try {
+    const slot = await Slot.findById(req.params.id);
+
+    if (!slot) {
+      return res.status(404).json({ message: "Slot not found" });
+    }
+
+    await Booking.deleteMany({ slotId: slot._id });
+    await slot.deleteOne();
+
+    res.json({ message: "Slot deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -92,5 +133,6 @@ const bookSlot = async (req, res) => {
 module.exports = {
   createSlot,
   getSlotsByZone,
+  deleteSlot,
   bookSlot
 };

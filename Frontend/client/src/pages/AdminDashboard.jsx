@@ -48,6 +48,32 @@ function AdminDashboard() {
     }
   };
 
+  const handleDeleteZone = async (zoneId) => {
+    if (!window.confirm("Delete this zone and all slots/bookings?")) {
+      return;
+    }
+
+    try {
+      await API.delete(`/zones/${zoneId}`);
+      setZones(zones.filter((zone) => zone._id !== zoneId));
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || "Could not delete zone");
+    }
+  };
+
+  const handleToggleMaintenance = async (zone) => {
+    const newStatus = zone.status === "maintenance" ? "active" : "maintenance";
+
+    try {
+      const res = await API.put(`/zones/${zone._id}`, { status: newStatus });
+      setZones(zones.map((item) => (item._id === zone._id ? res.data : item)));
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || "Could not update zone status");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
@@ -99,16 +125,38 @@ function AdminDashboard() {
               />
 
               <div className="p-4">
-                <h2 className="mb-4 text-2xl font-semibold">
+                <h2 className="mb-2 text-2xl font-semibold">
                   {zone.name}
                 </h2>
 
-                <Link
-                  to={`/admin/map/${zone._id}`}
-                  className="inline-block rounded bg-blue-600 px-4 py-2 font-semibold text-white"
-                >
-                  Edit Slots
-                </Link>
+                <p className="mb-4 text-sm font-medium text-slate-600">
+                  Status: {zone.status === "maintenance" ? "Maintenance" : "Active"}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    to={`/admin/map/${zone._id}`}
+                    className="rounded bg-blue-600 px-4 py-2 font-semibold text-white"
+                  >
+                    Edit Slots
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => handleToggleMaintenance(zone)}
+                    className="rounded bg-amber-500 px-4 py-2 font-semibold text-white"
+                  >
+                    {zone.status === "maintenance" ? "Set Active" : "Set Maintenance"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteZone(zone._id)}
+                    className="rounded bg-red-600 px-4 py-2 font-semibold text-white"
+                  >
+                    Delete Zone
+                  </button>
+                </div>
               </div>
             </div>
           ))}

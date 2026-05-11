@@ -57,19 +57,20 @@ function ParkingMap() {
   }, [zoneId]);
 
   const handleBookSlot = async (slotId, slotNumber) => {
+    if (zone?.status === "maintenance") {
+      alert("This zone is currently under maintenance and cannot be booked.");
+      return;
+    }
 
     try {
-
       const res = await API.put(
         `/slots/book/${slotId}`
       );
 
       const updatedSlots = slots.map((slot) =>
-
         slot._id === slotId
           ? res.data
           : slot
-
       );
 
       setSlots(updatedSlots);
@@ -77,11 +78,8 @@ function ParkingMap() {
       alert(`Slot ${slotNumber} booked successfully`);
 
     } catch (error) {
-
       console.log(error);
-
       alert(error.response?.data?.message || "Could not book slot");
-
     }
   };
 
@@ -110,9 +108,17 @@ function ParkingMap() {
 
       <main className="p-10">
 
-        <h1 className="text-4xl font-bold mb-8">
-          {zone.name}
-        </h1>
+        <div className="mb-4 flex flex-wrap items-center gap-4">
+          <h1 className="text-4xl font-bold">
+            {zone.name}
+          </h1>
+
+          {zone.status === "maintenance" && (
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-800">
+              Under Maintenance
+            </span>
+          )}
+        </div>
 
         {/* Stats */}
 
@@ -168,10 +174,10 @@ function ParkingMap() {
                   slot.slotNumber
                 )
               }
-              disabled={slot.status === "booked"}
+              disabled={slot.status === "booked" || zone.status === "maintenance"}
               className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white transition
 
-              ${slot.status === "available"
+              ${slot.status === "available" && zone.status !== "maintenance"
 
                 ? "bg-green-500 hover:scale-110"
 

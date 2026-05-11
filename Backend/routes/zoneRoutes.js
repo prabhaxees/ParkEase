@@ -6,7 +6,9 @@ const upload = require("../middleware/upload");
 
 const {
   createZone,
-  getZones
+  getZones,
+  updateZone,
+  deleteZone
 } = require("../controllers/zoneController");
 
 router.post(
@@ -16,5 +18,8 @@ router.post(
 );
 
 router.get("/", getZones);
+
+router.put("/:id", updateZone);
+router.delete("/:id", deleteZone);
 
 module.exports = router;

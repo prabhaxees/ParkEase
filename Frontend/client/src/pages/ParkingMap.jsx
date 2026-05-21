@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import API from "../api/axios";
+import { joinZone, leaveZone, onSlotBooked, onSlotReleased, removeSlotBookedListener, removeSlotReleasedListener } from "../api/socket";
 
 import Navbar from "../components/Navbar";
 
@@ -94,6 +95,59 @@ function ParkingMap() {
     fetchZone();
 
     fetchSlots();
+
+    // Join the zone's WebSocket room
+    console.log("[ParkingMap] Joining zone:", zoneId);
+    joinZone(zoneId);
+
+    // Handle real-time slot booked event
+    const handleSlotBooked = (data) => {
+      console.log("[ParkingMap] handleSlotBooked called with:", data);
+      if (data.zoneId === zoneId) {
+        console.log("[ParkingMap] Updating slot status for zone", zoneId);
+        setSlots((prevSlots) =>
+          prevSlots.map((slot) =>
+            slot._id === data.slotId
+              ? {
+                  ...slot,
+                  status: data.status,
+                  nextReservationTime: data.nextReservationTime
+                }
+              : slot
+          )
+        );
+      }
+    };
+
+    // Handle real-time slot released event
+    const handleSlotReleased = (data) => {
+      console.log("[ParkingMap] handleSlotReleased called with:", data);
+      if (data.zoneId === zoneId) {
+        console.log("[ParkingMap] Releasing slot for zone", zoneId);
+        setSlots((prevSlots) =>
+          prevSlots.map((slot) =>
+            slot._id === data.slotId
+              ? {
+                  ...slot,
+                  status: "available",
+                  nextReservationTime: null
+                }
+              : slot
+          )
+        );
+      }
+    };
+
+    onSlotBooked(handleSlotBooked);
+    onSlotReleased(handleSlotReleased);
+
+    // Cleanup on component unmount
+    return () => {
+      console.log("[ParkingMap] Leaving zone:", zoneId);
+      leaveZone(zoneId);
+      removeSlotBookedListener(handleSlotBooked);
+      removeSlotReleasedListener(handleSlotReleased);
+    };
 
   }, [zoneId]);
 

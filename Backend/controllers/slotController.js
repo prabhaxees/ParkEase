@@ -229,6 +229,21 @@ const bookSlot = async (req, res) => {
 
     console.log("BOOKING CREATED:", booking);
 
+    // Emit socket event to update all users viewing this zone
+    if (req.io) {
+      const eventData = {
+        slotId: slot._id,
+        zoneId: slot.zoneId,
+        status: isPrebook ? "prebooked" : "booked",
+        nextReservationTime: isPrebook ? requestedStartTime : null,
+        bookingType: isPrebook ? "prebook" : "now"
+      };
+      console.log(`[Socket] Emitting slot-booked to zone-${slot.zoneId}:`, eventData);
+      req.io.to(`zone-${slot.zoneId}`).emit("slot-booked", eventData);
+    } else {
+      console.log("[Socket] WARNING: req.io not available!");
+    }
+
     res.json({
       ...slot.toObject(),
       nextReservationTime: isPrebook ? requestedStartTime : null,

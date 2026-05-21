@@ -61,6 +61,16 @@ const cancelBooking = async (req, res) => {
     if (slot && slot.status === "booked" && booking.bookingType !== "prebook") {
       slot.status = "available";
       await slot.save();
+
+      // Emit socket event to update all users viewing this zone
+      if (req.io) {
+        req.io.to(`zone-${slot.zoneId}`).emit("slot-released", {
+          slotId: slot._id,
+          zoneId: slot.zoneId,
+          status: "available",
+          nextReservationTime: null
+        });
+      }
     }
 
     await booking.deleteOne();

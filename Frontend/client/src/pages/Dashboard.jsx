@@ -4,35 +4,35 @@ import Navbar from "../components/Navbar";
 
 function Dashboard() {
   return (
-    <div className="min-h-screen bg-[#fff5f7]">
+    <div className="page-shell">
       <Navbar />
 
-      <main className="p-10">
-        <h1 className="mb-8 text-4xl font-bold text-[#ba0c2f]">
+      <main className="app-main">
+        <h1 className="page-title mb-8 text-4xl">
           Dashboard
         </h1>
 
         <div className="grid gap-6 md:grid-cols-2">
           <Link
             to="/zones"
-            className="rounded-3xl bg-white p-6 shadow-lg border border-[#f3d2d9] transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+            className="card interactive-card p-6"
           >
-            <h2 className="mb-2 text-2xl font-semibold">
+            <h2 className="section-title mb-2 text-2xl">
               Find Parking
             </h2>
-            <p className="text-[#6b414a]">
+            <p className="muted">
               Select a zone and book an available slot.
             </p>
           </Link>
 
           <Link
             to="/my-bookings"
-            className="rounded-3xl bg-white p-6 shadow-lg border border-[#f3d2d9] transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+            className="card interactive-card p-6"
           >
-            <h2 className="mb-2 text-2xl font-semibold">
+            <h2 className="section-title mb-2 text-2xl">
               My Bookings
             </h2>
-            <p className="text-[#6b414a]">
+            <p className="muted">
               View the slots you have already booked.
             </p>
           </Link>

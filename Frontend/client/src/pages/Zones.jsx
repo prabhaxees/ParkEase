@@ -31,17 +31,17 @@ function Zones() {
 
   return (
 
-    <div className="min-h-screen bg-[#fff5f7]">
+    <div className="page-shell">
 
       <Navbar />
 
-      <main className="p-10">
+      <main className="app-main">
 
-        <h1 className="text-4xl font-bold mb-8 text-center text-[#ba0c2f]">
+        <h1 className="page-title mb-8 text-center text-4xl">
           Parking Zones
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 
           {zones.map((zone) => (
 
@@ -50,7 +50,7 @@ function Zones() {
               key={zone._id}
             >
 
-              <div className="bg-white rounded-3xl shadow-lg border border-[#f3d2d9] overflow-hidden hover:-translate-y-1 hover:shadow-xl transition duration-300 cursor-pointer">
+              <div className="card zone-card interactive-card cursor-pointer overflow-hidden">
 
                 <img
                   src={zone.imageUrl}
@@ -58,9 +58,9 @@ function Zones() {
                   className="h-60 w-full object-cover"
                 />
 
-                <div className="p-4">
+                <div className="p-5">
 
-                  <h2 className="text-2xl font-semibold">
+                  <h2 className="section-title text-2xl">
                     {zone.name}
                   </h2>
 

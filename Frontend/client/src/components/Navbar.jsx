@@ -26,39 +26,39 @@ function Navbar() {
 
   return (
 
-    <nav className="bg-[#ba0c2f] text-white px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-lg">
+    <nav className="app-nav">
 
       <div className="flex items-center gap-3">
-  <img
-    src={logo}
-    alt="ParkEase Logo"
-    className="h-14 w-auto object-contain"
-  />
+        <img
+          src={logo}
+          alt="ParkEase Logo"
+          className="h-12 w-auto object-contain"
+        />
 
-  <Link
-    to="/zones"
-    className="text-2xl font-bold tracking-tight"
-  >
-    ParkEase
-  </Link>
-</div>
+        <Link
+          to="/zones"
+          className="text-2xl font-bold tracking-tight"
+        >
+          ParkEase
+        </Link>
+      </div>
 
       <div className="flex flex-wrap items-center gap-4">
 
-        <Link to="/zones" className="text-sm font-medium hover:text-[#f7d9e0]">
+        <Link to="/zones" className="nav-link">
           Zones
         </Link>
 
-        <Link to="/dashboard" className="text-sm font-medium hover:text-[#f7d9e0]">
+        <Link to="/dashboard" className="nav-link">
           Dashboard
         </Link>
 
-        <Link to="/my-bookings" className="text-sm font-medium hover:text-[#f7d9e0]">
+        <Link to="/my-bookings" className="nav-link">
           My Bookings
         </Link>
 
         {userRole === "admin" && (
-          <Link to="/admin" className="text-sm font-medium hover:text-[#f7d9e0]">
+          <Link to="/admin" className="nav-link">
             Admin
           </Link>
         )}
@@ -66,7 +66,7 @@ function Navbar() {
         <button
           type="button"
           onClick={handleLogout}
-          className="rounded bg-white px-3 py-1 text-sm font-semibold text-[#ba0c2f] shadow-sm transition hover:bg-[#f7d9e0]"
+          className="nav-action"
         >
           Logout
         </button>

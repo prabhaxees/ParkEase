@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import API from "../api/axios";
 
@@ -149,26 +149,22 @@ function ParkingMap() {
 
   const getSlotClassName = (slot) => {
     if (slot.status === "booked" || zone.status === "maintenance") {
-      return "bg-red-500 cursor-not-allowed opacity-80";
+      return "slot-marker--booked";
     }
 
     if (slot.nextReservationTime) {
-      return "bg-yellow-500 hover:scale-110";
+      return "slot-marker--reserved";
     }
 
     if (slot.accessType === "faculty") {
-      return canBookSlot(slot)
-        ? "bg-blue-600 hover:scale-110"
-        : "bg-blue-600 cursor-not-allowed opacity-70";
+      return "slot-marker--faculty";
     }
 
     if (slot.accessType === "parent") {
-      return canBookSlot(slot)
-        ? "bg-purple-600 hover:scale-110"
-        : "bg-purple-600 cursor-not-allowed opacity-70";
+      return "slot-marker--parent";
     }
 
-    return "bg-green-500 hover:scale-110";
+    return "slot-marker--available";
   };
 
   const canPrebook = ["faculty", "parent"].includes(userRole);
@@ -200,155 +196,205 @@ function ParkingMap() {
 
   return (
 
-    <div className="min-h-screen bg-[#fff5f7]">
+    <div className="page-shell">
 
       <Navbar />
 
-      <main className="p-10">
+      <main className="app-main parking-map-main">
 
-        <div className="mb-4 flex flex-wrap items-center gap-4">
-          <h1 className="text-4xl font-bold text-[#ba0c2f]">
-            {zone.name}
-          </h1>
+        <div className="parking-workspace parking-map-workspace">
+          <aside className="garage-panel garage-info-panel">
+            <div className="garage-title-row">
+              <div>
+                <Link
+                  to="/zones"
+                  className="garage-back-pill"
+                  aria-label="Back to zones"
+                >
+                  {"<"}
+                </Link>
 
-          {zone.status === "maintenance" && (
-            <span className="rounded-full bg-[#f7d9e0] px-3 py-1 text-sm font-semibold text-[#8a0a23]">
-              Under Maintenance
-            </span>
-          )}
-        </div>
+                <h1 className="page-title mt-6 text-4xl">
+                  {zone.name}
+                </h1>
 
-        {/* Parking Layout Summary */}
-
-        <div className="grid gap-4 mb-6 md:grid-cols-[1fr_auto]">
-          <div className="rounded-3xl bg-white p-6 shadow-lg border border-[#f3d2d9] max-w-xl">
-            <h2 className="mb-4 text-2xl font-semibold text-[#3b1a20]">
-              Parking Layout
-            </h2>
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-3xl bg-[#fff5f7] p-4 text-sm text-[#6b414a] shadow-sm border border-[#f3d2d9]">
-                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#ba0c2f] mb-1">
-                  Total Spaces
-                </p>
-                <p className="text-3xl font-bold text-[#3b1a20]">{slots.length}</p>
+                <div className="garage-meta">
+                  <span>{availableSlots}/{slots.length || 0} open</span>
+                  <span>{zone.status === "maintenance" ? "Maintenance" : "Live zone"}</span>
+                </div>
               </div>
 
-              <div className="rounded-3xl bg-[#fff5f7] p-4 text-sm text-[#6b414a] shadow-sm border border-[#f3d2d9]">
-                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#ba0c2f] mb-1">
-                  Occupied
-                </p>
-                <p className="text-3xl font-bold text-[#3b1a20]">{bookedSlots}</p>
+              {zone.status === "maintenance" && (
+                <span className="badge">
+                  Maintenance
+                </span>
+              )}
+            </div>
+
+            <div className="stat-grid">
+              <div className="stat-card is-active">
+                <span>Available</span>
+                <strong>{availableSlots}</strong>
               </div>
 
-              <div className="rounded-3xl bg-[#fff5f7] p-4 text-sm text-[#6b414a] shadow-sm border border-[#f3d2d9]">
-                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#ba0c2f] mb-1">
-                  Available
-                </p>
-                <p className="text-3xl font-bold text-[#3b1a20]">{availableSlots}</p>
+              <div className="stat-card">
+                <span>Occupied</span>
+                <strong>{bookedSlots}</strong>
+              </div>
+
+              <div className="stat-card">
+                <span>Total</span>
+                <strong>{slots.length}</strong>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Legend */}
+            <div className="booking-tab">
+              <p className="booking-tab-label">
+                Booking
+              </p>
 
-        <div className="flex gap-6 mb-6">
+              <p className="booking-tab-value">
+                {selectedSlot ? `Slot ${selectedSlot.slotNumber}` : "Select a slot"}
+              </p>
 
-          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
-            <div className="w-4 h-4 bg-green-500 rounded-full shadow-sm"></div>
-            <p>Available</p>
-          </div>
+              <p className="booking-tab-note">
+                No charges applied.
+              </p>
+            </div>
 
-          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
-            <div className="w-4 h-4 bg-red-500 rounded-full shadow-sm"></div>
-            <p>Booked</p>
-          </div>
+            <div className="legend-panel">
+              <div className="legend-item">
+                <span className="legend-dot available"></span>
+                <p>Available</p>
+              </div>
 
-          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
-            <div className="w-4 h-4 bg-blue-600 rounded-full shadow-sm"></div>
-            <p>Faculty only</p>
-          </div>
+              <div className="legend-item">
+                <span className="legend-dot booked"></span>
+                <p>Booked</p>
+              </div>
 
-          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
-            <div className="w-4 h-4 bg-purple-600 rounded-full shadow-sm"></div>
-            <p>Parent only</p>
-          </div>
+              <div className="legend-item">
+                <span className="legend-dot faculty"></span>
+                <p>Faculty only</p>
+              </div>
 
-          <div className="flex items-center gap-2 text-sm text-[#3b1a20]">
-            <div className="w-4 h-4 bg-yellow-500 rounded-full shadow-sm"></div>
-            <p>Prebooked</p>
-          </div>
+              <div className="legend-item">
+                <span className="legend-dot parent"></span>
+                <p>Parent only</p>
+              </div>
 
-        </div>
+              <div className="legend-item">
+                <span className="legend-dot prebooked"></span>
+                <p>Prebooked</p>
+              </div>
+            </div>
+          </aside>
 
-        {/* Parking Map */}
+          <section className="garage-panel map-panel">
+            <div className="map-panel-header">
+              <div>
+                <p className="booking-tab-label">
+                  Parking Layout
+                </p>
 
-        <div className="relative w-fit">
+                <h2 className="section-title text-2xl">
+                  {zone.name}
+                </h2>
+              </div>
 
-          <img
-            src={zone.imageUrl}
-            alt={zone.name}
-            className="rounded-xl shadow-lg max-w-full"
-          />
+              <div className="map-floor-tabs">
+                <button type="button" className="floor-tab is-active">
+                  1st
+                </button>
 
-          {slots.map((slot) => (
+                <button type="button" className="floor-tab" disabled>
+                  A
+                </button>
 
-            <button
-              key={slot._id}
-              onClick={() => handleSlotClick(slot)}
-              disabled={!canBookSlot(slot)}
-              title={SLOT_TYPE_LABELS[slot.accessType || "default"]}
-              className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white transition
+                <button type="button" className="floor-tab" disabled>
+                  B
+                </button>
+              </div>
+            </div>
 
-              ${getSlotClassName(slot)}`}
-              style={{
-                left: `${slot.x}px`,
-                top: `${slot.y}px`,
-                transform: "translate(-50%, -50%)"
-              }}
-            >
-              {slot.slotNumber}
-            </button>
+            <div className="map-frame">
 
-          ))}
+              <img
+                src={zone.imageUrl}
+                alt={zone.name}
+              />
 
+              {slots.map((slot) => (
+
+                <button
+                  key={slot._id}
+                  onClick={() => handleSlotClick(slot)}
+                  disabled={!canBookSlot(slot)}
+                  title={SLOT_TYPE_LABELS[slot.accessType || "default"]}
+                  className={`slot-marker ${getSlotClassName(slot)}`}
+                  style={{
+                    left: `${slot.x}px`,
+                    top: `${slot.y}px`,
+                    transform: "translate(-50%, -50%)"
+                  }}
+                >
+                  {slot.slotNumber}
+                </button>
+
+              ))}
+
+            </div>
+          </section>
         </div>
 
         {selectedSlot && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl border border-[#f3d2d9]">
-              <h2 className="text-2xl font-semibold text-[#3b1a20]">
-                Slot {selectedSlot.slotNumber}
-              </h2>
+          <div className="booking-modal">
+            <div className="booking-sheet">
+              <div className="booking-sheet-top">
+                <div>
+                  <p className="booking-tab-label">
+                    Selected Slot
+                  </p>
 
-              <p className="mt-2 text-sm text-[#6b414a]">
-                Choose a time to prebook this slot for one hour.
-              </p>
+                  <h2 className="section-title mt-1 text-2xl">
+                    No-charge booking
+                  </h2>
+                </div>
+
+                <span className="slot-number-badge">
+                  {selectedSlot.slotNumber}
+                </span>
+              </div>
 
               {selectedSlot.nextReservationTime && (
-                <p className="mt-3 rounded-2xl bg-[#fff5f7] px-3 py-2 text-sm text-[#6b414a]">
+                <p className="muted mt-4 text-sm">
                   Next reservation:{" "}
                   {new Date(selectedSlot.nextReservationTime).toLocaleString()}
                 </p>
               )}
 
-              <input
-                type="datetime-local"
-                min={minimumPrebookTime}
-                value={prebookTime}
-                onChange={(e) => setPrebookTime(e.target.value)}
-                className="mt-5 w-full rounded-xl border border-[#f3d2d9] p-3 text-[#3b1a20] focus:border-[#ba0c2f] focus:ring-2 focus:ring-[#f7d9e0]"
-              />
+              <div className="time-box">
+                <p className="booking-tab-label">
+                  Arrive Time
+                </p>
 
-              <div className="mt-6 flex flex-wrap justify-end gap-3">
+                <input
+                  type="datetime-local"
+                  min={minimumPrebookTime}
+                  value={prebookTime}
+                  onChange={(e) => setPrebookTime(e.target.value)}
+                  className="field mt-3"
+                />
+              </div>
+
+              <div className="booking-actions">
                 <button
                   type="button"
                   onClick={() => {
                     setSelectedSlot(null);
                     setPrebookTime("");
                   }}
-                  className="rounded-2xl border border-[#f3d2d9] px-4 py-2 text-sm font-semibold text-[#3b1a20] transition hover:bg-[#fff5f7]"
+                  className="btn-ghost text-sm"
                 >
                   Cancel
                 </button>
@@ -359,7 +405,7 @@ function ParkingMap() {
                   onClick={() =>
                     handleBookSlot(selectedSlot._id, selectedSlot.slotNumber)
                   }
-                  className="rounded-2xl bg-[#3b1a20] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5d2b35] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="btn-secondary text-sm disabled:opacity-60"
                 >
                   Book Now
                 </button>
@@ -374,7 +420,7 @@ function ParkingMap() {
                       new Date(prebookTime).toISOString()
                     )
                   }
-                  className="rounded-2xl bg-[#ba0c2f] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#8a0a23] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="btn-primary text-sm disabled:opacity-60"
                 >
                   Prebook
                 </button>

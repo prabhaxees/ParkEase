@@ -75,22 +75,22 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fff5f7]">
+    <div className="page-shell">
       <Navbar />
 
-      <main className="p-10">
-        <h1 className="mb-8 text-4xl font-bold text-[#ba0c2f]">
+      <main className="app-main">
+        <h1 className="page-title mb-8 text-4xl">
           Admin Dashboard
         </h1>
 
         <form
           onSubmit={handleCreateZone}
-          className="mb-10 grid gap-4 rounded-[30px] bg-white p-6 shadow-lg border border-[#f3d2d9] md:grid-cols-[1fr_1fr_auto]"
+          className="card mb-10 grid gap-4 p-6 md:grid-cols-[1fr_1fr_auto]"
         >
           <input
             type="text"
             placeholder="Zone name"
-            className="rounded border p-3"
+            className="field"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -99,14 +99,14 @@ function AdminDashboard() {
           <input
             type="file"
             accept="image/*"
-            className="rounded border p-3"
+            className="field"
             onChange={(e) => setImage(e.target.files[0])}
             required
           />
 
           <button
             type="submit"
-            className="rounded-2xl bg-[#ba0c2f] px-6 py-3 font-semibold text-white transition hover:bg-[#8a0a23]"
+            className="btn-primary px-6"
           >
             Add Zone
           </button>
@@ -116,7 +116,7 @@ function AdminDashboard() {
           {zones.map((zone) => (
             <div
               key={zone._id}
-              className="overflow-hidden rounded-[30px] bg-white shadow-lg border border-[#f3d2d9]"
+              className="card zone-card interactive-card overflow-hidden"
             >
               <img
                 src={zone.imageUrl}
@@ -125,18 +125,18 @@ function AdminDashboard() {
               />
 
               <div className="p-4">
-                <h2 className="mb-2 text-2xl font-semibold">
+                <h2 className="section-title mb-2 text-2xl">
                   {zone.name}
                 </h2>
 
-                <p className="mb-4 text-sm font-medium text-[#6b414a]">
+                <p className="muted mb-4 text-sm font-bold">
                   Status: {zone.status === "maintenance" ? "Maintenance" : "Active"}
                 </p>
 
                 <div className="flex flex-wrap gap-2">
                   <Link
                     to={`/admin/map/${zone._id}`}
-                    className="rounded-2xl bg-[#ba0c2f] px-4 py-2 font-semibold text-white transition hover:bg-[#8a0a23]"
+                    className="btn-primary"
                   >
                     Edit Slots
                   </Link>
@@ -144,7 +144,7 @@ function AdminDashboard() {
                   <button
                     type="button"
                     onClick={() => handleToggleMaintenance(zone)}
-                    className="rounded-2xl bg-[#8a0a23] px-4 py-2 font-semibold text-white transition hover:bg-[#66161f]"
+                    className="btn-secondary"
                   >
                     {zone.status === "maintenance" ? "Set Active" : "Set Maintenance"}
                   </button>
@@ -152,7 +152,7 @@ function AdminDashboard() {
                   <button
                     type="button"
                     onClick={() => handleDeleteZone(zone._id)}
-                    className="rounded-2xl bg-[#ba0c2f] px-4 py-2 font-semibold text-white transition hover:bg-[#8a0a23]"
+                    className="btn-danger"
                   >
                     Delete Zone
                   </button>

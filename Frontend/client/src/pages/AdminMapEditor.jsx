@@ -145,19 +145,19 @@ function AdminMapEditor() {
 
   return (
 
-    <div className="min-h-screen bg-[#fff5f7]">
+    <div className="page-shell">
 
       <Navbar />
 
-      <main className="p-10">
+      <main className="app-main">
 
         <div className="mb-4 flex flex-wrap items-center gap-4">
-          <h1 className="text-4xl font-bold text-[#ba0c2f]">
+          <h1 className="page-title text-4xl">
             {zone.name}
           </h1>
 
           {zone.status === "maintenance" && (
-            <span className="rounded-full bg-[#f7d9e0] px-3 py-1 text-sm font-semibold text-[#8a0a23]">
+            <span className="badge">
               Maintenance Mode
             </span>
           )}
@@ -166,7 +166,7 @@ function AdminMapEditor() {
         <div className="mb-5 flex flex-wrap items-center gap-3">
           <label
             htmlFor="newSlotType"
-            className="text-sm font-semibold text-[#3b1a20]"
+            className="text-sm font-bold text-white"
           >
             New slot type
           </label>
@@ -175,7 +175,7 @@ function AdminMapEditor() {
             id="newSlotType"
             value={newSlotType}
             onChange={(e) => setNewSlotType(e.target.value)}
-            className="rounded-xl border border-[#f3d2d9] bg-white px-3 py-2 text-sm text-[#3b1a20] focus:border-[#ba0c2f] focus:ring-2 focus:ring-[#f7d9e0]"
+            className="field max-w-48 py-2 text-sm"
           >
             {SLOT_TYPES.map((type) => (
               <option key={type.value} value={type.value}>
@@ -185,27 +185,27 @@ function AdminMapEditor() {
           </select>
         </div>
 
-        <div className="relative w-fit">
+        <div className="map-frame relative">
 
           <img
             src={zone.imageUrl}
             alt={zone.name}
             onClick={handleMapClick}
-            className="rounded-xl shadow-lg max-w-full cursor-crosshair"
+            className="max-w-full cursor-crosshair rounded-xl"
           />
 
           {slots.map((slot) => (
 
             <div
               key={slot._id}
-              className={`absolute px-2 py-1 rounded-full text-xs font-bold text-white
+              className={`slot-marker
               ${slot.status !== "available"
-                ? "bg-red-500"
+                ? "slot-marker--booked"
                 : slot.accessType === "faculty"
-                  ? "bg-blue-600"
+                  ? "slot-marker--faculty"
                   : slot.accessType === "parent"
-                    ? "bg-purple-600"
-                    : "bg-green-500"
+                    ? "slot-marker--parent"
+                    : "slot-marker--available"
               }`}
               style={{
                 left: `${slot.x}px`,
@@ -220,11 +220,11 @@ function AdminMapEditor() {
 
         </div>
 
-        <div className="mt-8 rounded-[30px] bg-white p-6 shadow-lg border border-[#f3d2d9]">
-          <h2 className="mb-4 text-2xl font-semibold text-[#ba0c2f]">Slots</h2>
+        <div className="card mt-8 p-6">
+          <h2 className="section-title mb-4 text-2xl">Slots</h2>
 
           {slots.length === 0 ? (
-            <p className="text-sm text-[#6b414a]">
+            <p className="muted text-sm">
               Click the map to add slots.
             </p>
           ) : (
@@ -232,11 +232,11 @@ function AdminMapEditor() {
               {slots.map((slot) => (
                 <div
                   key={slot._id}
-                  className="flex items-center justify-between gap-4 rounded-3xl border border-[#f3d2d9] px-4 py-3 bg-[#fff5f7]"
+                  className="admin-slot-row flex items-center justify-between gap-4 px-4 py-3"
                 >
                   <div>
                     <p className="font-semibold">{slot.slotNumber}</p>
-                    <p className="text-sm text-[#6b414a]">
+                    <p className="muted text-sm">
                       Status: {slot.status}
                       {slot.bookedByName && (
                         <span>
@@ -253,7 +253,7 @@ function AdminMapEditor() {
                         handleSlotTypeChange(slot._id, e.target.value)
                       }
                       disabled={slot.status === "booked"}
-                      className="rounded-xl border border-[#f3d2d9] bg-white px-3 py-2 text-sm text-[#3b1a20] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="field w-auto py-2 text-sm disabled:opacity-60"
                     >
                       {SLOT_TYPES.map((type) => (
                         <option key={type.value} value={type.value}>
@@ -265,7 +265,7 @@ function AdminMapEditor() {
                     <button
                       type="button"
                       onClick={() => handleDeleteSlot(slot._id)}
-                      className="rounded-2xl bg-[#ba0c2f] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#8a0a23]"
+                      className="btn-danger text-sm"
                     >
                       Delete
                     </button>

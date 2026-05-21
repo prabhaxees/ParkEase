@@ -35,22 +35,26 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fff5f7]">
+    <div className="auth-shell">
 
       <form
         onSubmit={handleRegister}
-        className="bg-white/95 border border-[#f3d2d9] p-8 rounded-3xl shadow-[0_20px_50px_rgba(186,12,47,0.14)] w-96"
+        className="card w-full max-w-sm p-8"
       >
 
-        <h1 className="text-3xl font-bold text-center text-[#ba0c2f] mb-6">
+        <h1 className="page-title mb-2 text-center text-3xl">
           Register
         </h1>
+
+        <p className="muted mb-6 text-center text-sm">
+          Create a profile that matches your parking access.
+        </p>
 
         <input
           type="text"
           name="name"
           placeholder="Name"
-          className="w-full border border-[#f3d2d9] p-3 rounded-xl mb-4 focus:border-[#ba0c2f] focus:ring-2 focus:ring-[#f7d9e0]"
+          className="field mb-4"
           value={formData.name}
           onChange={handleChange}
           required
@@ -60,7 +64,7 @@ function Register() {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full border border-[#f3d2d9] p-3 rounded-xl mb-4 focus:border-[#ba0c2f] focus:ring-2 focus:ring-[#f7d9e0]"
+          className="field mb-4"
           value={formData.email}
           onChange={handleChange}
           required
@@ -70,7 +74,7 @@ function Register() {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full border border-[#f3d2d9] p-3 rounded-xl mb-4 focus:border-[#ba0c2f] focus:ring-2 focus:ring-[#f7d9e0]"
+          className="field mb-4"
           value={formData.password}
           onChange={handleChange}
           required
@@ -78,7 +82,7 @@ function Register() {
 
         <select
           name="role"
-          className="w-full border border-[#f3d2d9] p-3 rounded-xl mb-4 focus:border-[#ba0c2f] focus:ring-2 focus:ring-[#f7d9e0]"
+          className="field mb-4"
           value={formData.role}
           onChange={handleChange}
         >
@@ -89,16 +93,16 @@ function Register() {
 
         <button
           type="submit"
-          className="w-full bg-[#ba0c2f] hover:bg-[#8a0a23] text-white p-3 rounded-xl transition"
+          className="btn-primary w-full"
         >
           Register
         </button>
 
-        <p className="mt-4 text-center text-sm text-[#6b414a]">
+        <p className="muted mt-4 text-center text-sm">
           Already have an account?{" "}
           <Link
             to="/"
-            className="font-semibold text-[#ba0c2f] hover:text-[#8a0a23]"
+            className="font-bold text-[#08cbe4] hover:text-white"
           >
             Login
           </Link>

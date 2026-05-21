@@ -53,69 +53,73 @@ function MyBookings() {
 
   return (
 
-    <div className="min-h-screen bg-[#fff5f7]">
+    <div className="page-shell">
 
       <Navbar />
 
-      <div className="p-10">
+      <main className="app-main">
 
-        <h1 className="text-4xl font-bold mb-8 text-[#ba0c2f]">
+        <h1 className="page-title mb-8 text-4xl">
           My Bookings
         </h1>
 
         {bookings.length === 0 && (
-          <div className="bg-white p-6 rounded-3xl shadow-lg border border-[#f3d2d9]">
-            <p className="text-[#5d3b42]">
+          <div className="card p-6">
+            <p className="muted">
               No bookings found.
             </p>
           </div>
         )}
 
-        <div className="grid gap-6">
+        <div className="grid gap-4">
 
           {bookings.map((booking) => (
 
             <div
               key={booking._id}
-              className="bg-white p-6 rounded-3xl shadow-lg border border-[#f3d2d9]"
+              className="card booking-card"
             >
+              <div>
 
-              <h2 className="text-2xl font-semibold mb-2">
-                Zone: {booking.zoneId?.name}
-              </h2>
-
-              <p className="text-lg">
-                Slot: {booking.slotId?.slotNumber}
-              </p>
-
-              <p className="text-[#6b414a] mt-2">
-                {getBookingTimeText(booking)}
-              </p>
-
-              {booking.bookingType === "prebook" && booking.endTime && (
-                <p className="text-[#6b414a] mt-1">
-                  Until: {new Date(booking.endTime).toLocaleString()}
+                <p className="booking-tab-label">
+                  {booking.bookingType === "prebook" ? "Prebooked" : "Booked Now"}
                 </p>
-              )}
 
-              <p className="text-sm font-semibold text-[#ba0c2f] mt-3">
-                {booking.bookingType === "prebook" ? "Prebooked" : "Booked Now"}
-              </p>
+                <h2 className="section-title mt-1 text-2xl">
+                  {booking.zoneId?.name}
+                </h2>
 
-              <button
-                type="button"
-                onClick={() => handleCancelBooking(booking._id)}
-                className="mt-4 rounded-2xl bg-[#ba0c2f] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#8a0a23]"
-              >
-                Cancel Booking
-              </button>
+                <p className="muted mt-2">
+                  {getBookingTimeText(booking)}
+                </p>
+
+                {booking.bookingType === "prebook" && booking.endTime && (
+                  <p className="muted mt-1">
+                    Until: {new Date(booking.endTime).toLocaleString()}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                <span className="booking-slot-pill">
+                  {booking.slotId?.slotNumber}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => handleCancelBooking(booking._id)}
+                  className="btn-danger text-sm"
+                >
+                  Cancel Booking
+                </button>
+              </div>
             </div>
 
           ))}
 
         </div>
 
-      </div>
+      </main>
 
     </div>
   );

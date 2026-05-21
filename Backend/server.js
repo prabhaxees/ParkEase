@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
-const fs = require("fs");
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
@@ -17,7 +16,18 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+// CORS configuration for frontend deployment
+const allowedOrigins = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"]
+  : ["http://localhost:5173", "http://localhost:3000"];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
@@ -25,25 +35,27 @@ app.use("/api/slots", slotRoutes);
 app.use("/api/zones", zoneRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-const clientDistPath = path.join(
-  __dirname,
-  "../Frontend/client/dist"
-);
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ParkEase API Running", timestamp: new Date().toISOString() });
+});
 
-if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
-
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(clientDistPath, "index.html"));
+app.get("/", (req, res) => {
+  res.json({
+    message: "ParkEase Backend API",
+    version: "1.0.0",
+    endpoints: {
+      health: "/api/health",
+      auth: "/api/auth",
+      slots: "/api/slots",
+      zones: "/api/zones",
+      bookings: "/api/bookings",
+    },
   });
-} else {
-  app.get("/", (req, res) => {
-    res.send("ParkEase API Running...");
-  });
-}
+});
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
 });

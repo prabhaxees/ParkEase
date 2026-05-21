@@ -1,0 +1,10 @@
+services:
+  - type: static_site
+    name: parkease-frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    publishDirectory: dist
+    envVars:
+      - key: VITE_API_URL
+        scope: build
+        sync: false

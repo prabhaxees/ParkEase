@@ -17,6 +17,12 @@ const slotSchema = new mongoose.Schema({
     type: String,
     enum: ["available", "booked"],
     default: "available"
+  },
+
+  accessType: {
+    type: String,
+    enum: ["default", "faculty", "parent"],
+    default: "default"
   }
 
 });

@@ -58,7 +58,7 @@ const cancelBooking = async (req, res) => {
 
     const slot = await Slot.findById(booking.slotId);
 
-    if (slot && slot.status === "booked") {
+    if (slot && slot.status === "booked" && booking.bookingType !== "prebook") {
       slot.status = "available";
       await slot.save();
     }

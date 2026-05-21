@@ -1,8 +1,23 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "./logo.png";
 
+const getUserRole = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(atob(token.split(".")[1])).role;
+  } catch {
+    return null;
+  }
+};
+
 function Navbar() {
   const navigate = useNavigate();
+  const userRole = getUserRole();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -42,9 +57,11 @@ function Navbar() {
           My Bookings
         </Link>
 
-        <Link to="/admin" className="text-sm font-medium hover:text-[#f7d9e0]">
-          Admin
-        </Link>
+        {userRole === "admin" && (
+          <Link to="/admin" className="text-sm font-medium hover:text-[#f7d9e0]">
+            Admin
+          </Link>
+        )}
 
         <button
           type="button"

@@ -43,6 +43,14 @@ function MyBookings() {
     }
   };
 
+  const getBookingTimeText = (booking) => {
+    if (booking.bookingType === "prebook") {
+      return `Reserved For: ${new Date(booking.startTime).toLocaleString()}`;
+    }
+
+    return `Booked At: ${new Date(booking.bookedAt).toLocaleString()}`;
+  };
+
   return (
 
     <div className="min-h-screen bg-[#fff5f7]">
@@ -81,11 +89,17 @@ function MyBookings() {
               </p>
 
               <p className="text-[#6b414a] mt-2">
-                Booked At:
-                {" "}
-                {new Date(
-                  booking.bookedAt
-                ).toLocaleString()}
+                {getBookingTimeText(booking)}
+              </p>
+
+              {booking.bookingType === "prebook" && booking.endTime && (
+                <p className="text-[#6b414a] mt-1">
+                  Until: {new Date(booking.endTime).toLocaleString()}
+                </p>
+              )}
+
+              <p className="text-sm font-semibold text-[#ba0c2f] mt-3">
+                {booking.bookingType === "prebook" ? "Prebooked" : "Booked Now"}
               </p>
 
               <button

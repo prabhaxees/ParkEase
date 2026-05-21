@@ -20,6 +20,22 @@ const bookingSchema = new mongoose.Schema({
   bookedAt: {
     type: Date,
     default: Date.now
+  },
+
+  startTime: {
+    type: Date,
+    default: Date.now
+  },
+
+  endTime: {
+    type: Date,
+    default: null
+  },
+
+  bookingType: {
+    type: String,
+    enum: ["now", "prebook"],
+    default: "now"
   }
 
 });

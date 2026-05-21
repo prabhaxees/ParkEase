@@ -202,150 +202,71 @@ function ParkingMap() {
 
       <main className="app-main parking-map-main">
 
-        <div className="parking-workspace parking-map-workspace">
-          <aside className="garage-panel garage-info-panel">
-            <div className="garage-title-row">
-              <div>
-                <Link
-                  to="/zones"
-                  className="garage-back-pill"
-                  aria-label="Back to zones"
-                >
-                  {"<"}
-                </Link>
+<div className="parking-workspace parking-map-workspace">
 
-                <h1 className="page-title mt-6 text-4xl">
-                  {zone.name}
-                </h1>
+  <aside className="garage-panel garage-info-panel">
+    <div className="garage-title-row">
+      <Link to="/zones" className="garage-back-pill" aria-label="Back to zones">{"<"}</Link>
+      <h1 className="page-title mt-6 text-4xl">{zone.name}</h1>
+      <div className="garage-meta">
+        <span>{availableSlots}/{slots.length || 0} open</span>
+        <span>{zone.status === "maintenance" ? "Maintenance" : "Live zone"}</span>
+      </div>
+      {zone.status === "maintenance" && <span className="badge">Maintenance</span>}
+    </div>
 
-                <div className="garage-meta">
-                  <span>{availableSlots}/{slots.length || 0} open</span>
-                  <span>{zone.status === "maintenance" ? "Maintenance" : "Live zone"}</span>
-                </div>
-              </div>
+    <div className="stat-grid">
+      <div className="stat-card is-active"><span>Available</span><strong>{availableSlots}</strong></div>
+      <div className="stat-card"><span>Occupied</span><strong>{bookedSlots}</strong></div>
+      <div className="stat-card"><span>Total</span><strong>{slots.length}</strong></div>
+    </div>
 
-              {zone.status === "maintenance" && (
-                <span className="badge">
-                  Maintenance
-                </span>
-              )}
-            </div>
+    <div className="booking-tab">
+      <p className="booking-tab-label">Booking</p>
+      <p className="booking-tab-value">{selectedSlot ? `Slot ${selectedSlot.slotNumber}` : "Select a slot"}</p>
+      <p className="booking-tab-note">No charges applied.</p>
+    </div>
 
-            <div className="stat-grid">
-              <div className="stat-card is-active">
-                <span>Available</span>
-                <strong>{availableSlots}</strong>
-              </div>
+    <div className="legend-panel">
+      <div className="legend-item"><span className="legend-dot available"></span><p>Available</p></div>
+      <div className="legend-item"><span className="legend-dot booked"></span><p>Booked</p></div>
+      <div className="legend-item"><span className="legend-dot faculty"></span><p>Faculty only</p></div>
+      <div className="legend-item"><span className="legend-dot parent"></span><p>Parent only</p></div>
+      <div className="legend-item"><span className="legend-dot prebooked"></span><p>Prebooked</p></div>
+    </div>
+  </aside>
 
-              <div className="stat-card">
-                <span>Occupied</span>
-                <strong>{bookedSlots}</strong>
-              </div>
+  <section className="garage-panel map-panel">
+    <div className="map-panel-header">
+      <div>
+        <p className="booking-tab-label">Parking Layout</p>
+        <h2 className="section-title text-2xl">{zone.name}</h2>
+      </div>
+      <div className="map-floor-tabs">
+        <button type="button" className="floor-tab is-active">1st</button>
+        <button type="button" className="floor-tab" disabled>A</button>
+        <button type="button" className="floor-tab" disabled>B</button>
+      </div>
+    </div>
 
-              <div className="stat-card">
-                <span>Total</span>
-                <strong>{slots.length}</strong>
-              </div>
-            </div>
+    <div className="map-frame">
+      <img src={zone.imageUrl} alt={zone.name} />
+      {slots.map((slot) => (
+        <button
+          key={slot._id}
+          onClick={() => handleSlotClick(slot)}
+          disabled={!canBookSlot(slot)}
+          title={SLOT_TYPE_LABELS[slot.accessType || "default"]}
+          className={`slot-marker ${getSlotClassName(slot)}`}
+          style={{ left: `${slot.x}px`, top: `${slot.y}px`, transform: "translate(-50%, -50%)" }}
+        >
+          {slot.slotNumber}
+        </button>
+      ))}
+    </div>
+  </section>
 
-            <div className="booking-tab">
-              <p className="booking-tab-label">
-                Booking
-              </p>
-
-              <p className="booking-tab-value">
-                {selectedSlot ? `Slot ${selectedSlot.slotNumber}` : "Select a slot"}
-              </p>
-
-              <p className="booking-tab-note">
-                No charges applied.
-              </p>
-            </div>
-
-            <div className="legend-panel">
-              <div className="legend-item">
-                <span className="legend-dot available"></span>
-                <p>Available</p>
-              </div>
-
-              <div className="legend-item">
-                <span className="legend-dot booked"></span>
-                <p>Booked</p>
-              </div>
-
-              <div className="legend-item">
-                <span className="legend-dot faculty"></span>
-                <p>Faculty only</p>
-              </div>
-
-              <div className="legend-item">
-                <span className="legend-dot parent"></span>
-                <p>Parent only</p>
-              </div>
-
-              <div className="legend-item">
-                <span className="legend-dot prebooked"></span>
-                <p>Prebooked</p>
-              </div>
-            </div>
-          </aside>
-
-          <section className="garage-panel map-panel">
-            <div className="map-panel-header">
-              <div>
-                <p className="booking-tab-label">
-                  Parking Layout
-                </p>
-
-                <h2 className="section-title text-2xl">
-                  {zone.name}
-                </h2>
-              </div>
-
-              <div className="map-floor-tabs">
-                <button type="button" className="floor-tab is-active">
-                  1st
-                </button>
-
-                <button type="button" className="floor-tab" disabled>
-                  A
-                </button>
-
-                <button type="button" className="floor-tab" disabled>
-                  B
-                </button>
-              </div>
-            </div>
-
-            <div className="map-frame">
-
-              <img
-                src={zone.imageUrl}
-                alt={zone.name}
-              />
-
-              {slots.map((slot) => (
-
-                <button
-                  key={slot._id}
-                  onClick={() => handleSlotClick(slot)}
-                  disabled={!canBookSlot(slot)}
-                  title={SLOT_TYPE_LABELS[slot.accessType || "default"]}
-                  className={`slot-marker ${getSlotClassName(slot)}`}
-                  style={{
-                    left: `${slot.x}px`,
-                    top: `${slot.y}px`,
-                    transform: "translate(-50%, -50%)"
-                  }}
-                >
-                  {slot.slotNumber}
-                </button>
-
-              ))}
-
-            </div>
-          </section>
-        </div>
+</div>
 
         {selectedSlot && (
           <div className="booking-modal">

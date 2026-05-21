@@ -148,8 +148,7 @@ function AdminMapEditor() {
     <div className="page-shell">
 
       <Navbar />
-
-      <main className="app-main">
+      <main className="app-main admin-map-main">
 
         <div className="mb-4 flex flex-wrap items-center gap-4">
           <h1 className="page-title text-4xl">
@@ -184,7 +183,7 @@ function AdminMapEditor() {
             ))}
           </select>
         </div>
-
+        <section className="garage-panel map-panel">
         <div className="map-frame relative">
 
           <img
@@ -193,7 +192,7 @@ function AdminMapEditor() {
             onClick={handleMapClick}
             className="max-w-full cursor-crosshair rounded-xl"
           />
-
+              
           {slots.map((slot) => (
 
             <div
@@ -219,6 +218,7 @@ function AdminMapEditor() {
           ))}
 
         </div>
+        </section>
 
         <div className="card mt-8 p-6">
           <h2 className="section-title mb-4 text-2xl">Slots</h2>
